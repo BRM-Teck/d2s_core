@@ -1,3 +1,3 @@
-from .preprocessor import InvoiceDataExtractor 
+from .preprocessor import InvoiceDataExtractor
 
 __all__ = ["InvoiceDataExtractor"]

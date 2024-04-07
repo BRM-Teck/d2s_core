@@ -7,10 +7,9 @@ import pathlib
 
 from d2s_image2text.paddle_ocr import TextExtractorPaddleOCR
 from .utils.read_image import image_from_file
-from .settings import BASE_DIR
 
 
-DATA_DIR = BASE_DIR / "data"
+DATA_DIR = pathlib.Path(__file__).parent / "data"
 
 _logger = logging.getLogger(__name__)
 
@@ -343,11 +342,11 @@ class InvoiceDataExtractor(object):
         )
 
         extracted_invoice_numbers = left_bottom_bboxes.copy()
-        extracted_invoice_numbers[
-            "invoice_number"
-        ] = extracted_invoice_numbers.text.apply(
-            lambda x: re.search(self.invoice_number_regex, x, re.IGNORECASE)
-        ).apply(lambda x: x.group(0) if x is not None else np.nan)
+        extracted_invoice_numbers["invoice_number"] = (
+            extracted_invoice_numbers.text.apply(
+                lambda x: re.search(self.invoice_number_regex, x, re.IGNORECASE)
+            ).apply(lambda x: x.group(0) if x is not None else np.nan)
+        )
         extracted_invoice_numbers = extracted_invoice_numbers[
             ~extracted_invoice_numbers.invoice_number.isna()
         ]
@@ -404,7 +403,7 @@ class InvoiceDataExtractor(object):
                 )
                 match = re.match(self.vat_regex, text, re.IGNORECASE) if text else False
             if match:
-                vat = match.groupdict().get('vat', None)
+                vat = match.groupdict().get("vat", None)
                 if vat:
                     results.add(vat)
         _logger.debug("find_vat end")
@@ -447,11 +446,9 @@ class InvoiceDataExtractor(object):
                     # Essayer de façon vertical
                     df = self.__get_bottom_box__(box, limit=1)
                     # Trier par le plus proche sur la ligne horizontal passant par le centre de la box ou verticalement
-                    df["dist_from_vertical_line"] = (
-                        np.abs(
-                            df.c0 - box.c0
-                        )  # Par rapport à l'axe vertical passant par le centre de la box
-                    )
+                    df["dist_from_vertical_line"] = np.abs(
+                        df.c0 - box.c0
+                    )  # Par rapport à l'axe vertical passant par le centre de la box
                     df = df.sort_values(by=["dist_from_vertical_line", "c1"])
                     if len(df) >= 1:
                         text = (
@@ -494,21 +491,21 @@ class InvoiceDataExtractor(object):
             )
         else:
             self.data = pd.Series(
-            {
-                "filename": self.filename,
-                "invoice_number": self.find_invoice_num(),
-                "invoice_date": self.find_date(),
-                "VAT": self.find_vat(),
-                "total_ht": base_taxe,
-                "total_ttc": None,
-                "total_tva": None,
-                "total_remise": None,
-                "total_taxe": None,
-                "total_timbre": None,
-                "base_taxe": base_taxe,
-                "invoice_amounts": amounts,
-            }
-        )
+                {
+                    "filename": self.filename,
+                    "invoice_number": self.find_invoice_num(),
+                    "invoice_date": self.find_date(),
+                    "VAT": self.find_vat(),
+                    "total_ht": base_taxe,
+                    "total_ttc": None,
+                    "total_tva": None,
+                    "total_remise": None,
+                    "total_taxe": None,
+                    "total_timbre": None,
+                    "base_taxe": base_taxe,
+                    "invoice_amounts": amounts,
+                }
+            )
 
     def _get_base_tax_line_header(self):
         """
@@ -571,7 +568,7 @@ class InvoiceDataExtractor(object):
         return None if not results else max(results)
 
 
-def main(image_dir: pathlib.Path)-> pd.Series:
+def main(image_dir: pathlib.Path) -> pd.Series:
     img_file = list(image_dir.glob("*.png"))[0]
     image = image_from_file(img_file)
     data_extractor = InvoiceDataExtractor(image=image, filename=img_file.stem)

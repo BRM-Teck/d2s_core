@@ -11,6 +11,6 @@ def image_from_file(file: Path):
 
 
 if __name__ == "__main__":
-    image_dir = BASE_DIR / "data"/"test"/"images"
+    image_dir = BASE_DIR / "data" / "test" / "images"
     img_file = list(image_dir.glob("*.png"))[0]
     image = image_from_file(img_file)

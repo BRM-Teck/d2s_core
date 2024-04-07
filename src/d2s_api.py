@@ -41,4 +41,5 @@ async def process_image(files: List[UploadFile]):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app)
