@@ -7,9 +7,12 @@ import pathlib
 
 from d2s_image2text.paddle_ocr import TextExtractorPaddleOCR
 from .utils.read_image import image_from_file
+from .activation_token_file import (
+    get_amounts_activation_token_path,
+    get_invoice_number_token_file_path,
+    get_vat_act_token_file_path,
+)
 
-
-DATA_DIR = pathlib.Path(__file__).parent / "data"
 
 _logger = logging.getLogger(__name__)
 
@@ -157,29 +160,9 @@ class InvoiceDataExtractor(object):
         )
 
     def __init_activation_token__(self):
-        vat_act_token_file_path = (
-            DATA_DIR / "activation_token" / "vat_activation_token.csv"
-        )
-        if not vat_act_token_file_path.exists():
-            raise FileNotFoundError(
-                f"File Token for VAT not found: {vat_act_token_file_path}"
-            )
-
-        invoice_number_token_file_path = (
-            DATA_DIR / "activation_token" / "invoice_number_token.csv"
-        )
-        if not invoice_number_token_file_path.exists():
-            raise FileNotFoundError(
-                f"File Token for Invoice Number not found {invoice_number_token_file_path}"
-            )
-
-        amounts_activation_token_path = (
-            DATA_DIR / "activation_token" / "amounts_activation_token.csv"
-        )
-        if not amounts_activation_token_path.exists():
-            raise FileNotFoundError(
-                f"File Token for Amounts not found: {amounts_activation_token_path}"
-            )
+        vat_act_token_file_path = get_vat_act_token_file_path()
+        invoice_number_token_file_path = get_invoice_number_token_file_path()
+        amounts_activation_token_path = get_amounts_activation_token_path()
 
         self.vat_activation_token = pd.read_csv(vat_act_token_file_path)
         self.invoice_number_activation_token = pd.read_csv(
@@ -576,7 +559,8 @@ def main(image_dir: pathlib.Path) -> pd.Series:
 
 
 if __name__ == "__main__":
+    pass
     # import cProfile
     # cProfile.run('main()')
-    image_dir = DATA_DIR / "test" / "images"
-    main(image_dir)
+    # image_dir = DATA_DIR / "test" / "images"
+    # main(image_dir)
