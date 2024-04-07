@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "d2s-core"
+version = "1.0.1"
+description = "Document to structure backend"
+authors = ["jp-sft <kvnjessy@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "d2s_image2text", from = "src" },
+    { include = "d2s_preprocessor", from = "src" },
+    { include = "d2s_processor", from = "src" },
+    { include = "d2s_api.py", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+tqdm = "^4.66.2"
+pillow = "^10.3.0"
+numpy = "^1.26.4"
+colorlog = "^6.8.2"
+nltk = "^3.8.1"
+fastapi = "^0.110.1"
+python-multipart = "^0.0.9"
+uvicorn = "^0.29.0"
+
+[[tool.poetry.source]]
+name = "mirror.baidu.com"
+url = "https://mirror.baidu.com/pypi/simple"
+priority = "explicit"
+
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.3.5"
+ipdb = "^0.13.13"
+
+[tool.poetry.group.paddle.dependencies]
+paddlepaddle = { version = "^2.6.1", source = "mirror.baidu.com" }
+paddleocr = ">=2.0.1"
+
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
