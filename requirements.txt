@@ -1,0 +1,9 @@
+tqdm
+pillow
+numpy
+colorlog
+nltk
+fastapi
+python-multipart
+uvicorn
+paddleocr
