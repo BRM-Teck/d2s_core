@@ -21,6 +21,8 @@ nltk = "^3.8.1"
 fastapi = "^0.110.1"
 python-multipart = "^0.0.9"
 uvicorn = "^0.29.0"
+pandas = "^2.2.1"
+matplotlib = "^3.8.4"
 
 [[tool.poetry.source]]
 name = "mirror.baidu.com"

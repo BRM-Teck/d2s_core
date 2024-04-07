@@ -3,10 +3,6 @@ FROM paddlepaddle/paddle:2.6.1
 
 LABEL org.opencontainers.image.source https://github.com/BRM-Teck/d2s_core
 
-
-# Set working directory
-WORKDIR /usr/src/app
-
 # Create directory for the app user
 RUN mkdir -p /home/app && addgroup --system app && adduser --system --group app
 
