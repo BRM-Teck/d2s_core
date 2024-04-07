@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "d2s-core"
-version = "1.0.2a1"
+version = "1.0.2a2"
 description = "Document to structure backend"
 authors = ["jp-sft <kvnjessy@gmail.com>"]
 readme = "README.md"
